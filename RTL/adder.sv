@@ -7,11 +7,11 @@ typedef enum logic	[2:0]{
 	} alu_operation;
 
 
-module # (
-	parameter	DATA_WIDTH	=	8
-) alu (
-	input	wire 	[DATA_WIDTH-1:0]		clk_i,
-	input	wire 	[DATA_WIDTH-1:0]		rst_ni,
+module alu # (
+	parameter DATA_WIDTH	=	8
+)(
+	input	wire 							clk_i,
+	input	wire 							rst_ni,
 	input	wire 	[DATA_WIDTH-1:0]		src_a,
 	input	wire 	[DATA_WIDTH-1:0]		src_b,
 	output	logic 	[DATA_WIDTH-1:0]		result
@@ -19,8 +19,8 @@ module # (
 	alu_operation	alu_op;
 
 	always_ff @( posedge clk_i or negedge rst_ni) begin : alu_main_sync
-		if(!rst_ni)begin
-			result	<=	DATA_WIDTH'd0;
+		if(rst_ni == 1'd0)begin
+			result	<=	8'd0;
 		end
 		else begin
 			case(alu_op)
@@ -28,6 +28,7 @@ module # (
 				sub : result	<=	src_a	-	src_b;
 				mul : result	<=	src_a	*	src_b;
 				div : result	<=	src_a	/	src_b;
+				default: result	<=	8'd0;
 			endcase
 		end
 	end
